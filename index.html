@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CENA OCULTA — Quem é o Impostor?</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Oswald:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blood: #8b0000;
+    --deep-blood: #4a0000;
+    --bone: #d4c5a9;
+    --ash: #1a1a1a;
+    --fog: #2a2a2a;
+    --rust: #6b2d2d;
+    --pale: #c8b89a;
+    --green-mold: #3a4a2a;
+    --highlight: #cc2200;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: #0a0a0a;
+    color: var(--bone);
+    font-family: 'Special Elite', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: radial-gradient(ellipse at center top, #1a0000 0%, #0a0a0a 70%);
+    border-bottom: 2px solid var(--blood);
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--blood), transparent);
+    animation: bleed 3s ease-in-out infinite;
+  }
+
+  @keyframes bleed {
+    0%, 100% { opacity: 0.4; transform: scaleX(0.8); }
+    50% { opacity: 1; transform: scaleX(1); }
+  }
+
+  .drip-container {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: none;
+  }
+
+  .drip {
+    width: 3px;
+    background: linear-gradient(to bottom, var(--blood), transparent);
+    border-radius: 0 0 50% 50%;
+    animation: drip-fall linear infinite;
+  }
+
+  @keyframes drip-fall {
+    0% { height: 0; opacity: 1; transform: translateY(-10px); }
+    80% { opacity: 1; }
+    100% { height: 120px; opacity: 0; transform: translateY(60px); }
+  }
+
+  .site-title {
+    font-family: 'Creepster', cursive;
+    font-size: clamp(3rem, 10vw, 7rem);
+    color: var(--bone);
+    text-shadow:
+      0 0 20px var(--blood),
+      0 0 60px rgba(139,0,0,0.4),
+      3px 3px 0 var(--deep-blood);
+    letter-spacing: 0.08em;
+    animation: flicker 6s infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.7; }
+    97% { opacity: 1; }
+    98% { opacity: 0.5; }
+    99% { opacity: 1; }
+  }
+
+  .subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    color: var(--rust);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-top: 8px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tagline {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--pale);
+    margin-top: 24px;
+    font-style: italic;
+    opacity: 0.85;
+    position: relative;
+    z-index: 2;
+  }
+
+  .tagline span {
+    color: var(--highlight);
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  /* WARNING BANNER */
+  .warning-banner {
+    background: var(--deep-blood);
+    border-top: 1px solid var(--blood);
+    border-bottom: 1px solid var(--blood);
+    text-align: center;
+    padding: 10px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    color: var(--bone);
+    text-transform: uppercase;
+    animation: banner-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes banner-pulse {
+    0%, 100% { background: var(--deep-blood); }
+    50% { background: #5a0000; }
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Creepster', cursive;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: var(--blood);
+    text-align: center;
+    padding: 40px 20px 10px;
+    text-shadow: 0 0 30px rgba(139,0,0,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  .section-divider {
+    text-align: center;
+    color: var(--rust);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin-bottom: 30px;
+  }
+
+  /* VOTE COUNTER TOTAL */
+  .total-votes-bar {
+    background: var(--fog);
+    border: 1px solid #333;
+    border-left: 4px solid var(--blood);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .total-votes-bar .label {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pale);
+  }
+
+  .total-votes-bar .count {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--highlight);
+    text-shadow: 0 0 15px rgba(204,34,0,0.6);
+  }
+
+  /* SUSPECTS GRID */
+  .suspects-section {
+    padding: 0 20px 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .suspects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  /* CARD */
+  .suspect-card {
+    background: linear-gradient(160deg, #151515, #0e0e0e);
+    border: 1px solid #2a2a2a;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .suspect-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(139,0,0,0.15) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .suspect-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--blood);
+    box-shadow: 0 8px 30px rgba(139,0,0,0.3);
+  }
+
+  .suspect-card.voted {
+    border-color: var(--blood);
+    box-shadow: 0 0 20px rgba(139,0,0,0.5);
+  }
+
+  .suspect-card.voted::after {
+    content: '✓ SEU VOTO';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--blood);
+    color: var(--bone);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 4px 8px;
+    z-index: 10;
+  }
+
+  /* IMAGE PLACEHOLDER */
+  .card-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: #111;
+    overflow: hidden;
+  }
+
+  /* ============================================
+     IMAGENS DOS SUSPEITOS
+     Substitua o src de cada img pelo caminho da sua imagem.
+     Exemplo: src="imagens/suspeito1.jpg"
+     ============================================ */
+
+  .card-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(60%) contrast(1.1) brightness(0.85);
+    transition: filter 0.4s ease;
+  }
+
+  .suspect-card:hover .card-image-wrap img {
+    filter: grayscale(20%) contrast(1.2) brightness(0.9);
+  }
+
+  /* Placeholder visual quando não há imagem */
+  .card-image-wrap .placeholder-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #333;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .card-image-wrap .placeholder-icon svg {
+    width: 50px;
+    height: 50px;
+    opacity: 0.3;
+  }
+
+  .card-image-wrap img:not([src]),
+  .card-image-wrap img[src=""] {
+    display: none;
+  }
+
+  .card-image-wrap img:not([src]) ~ .placeholder-icon,
+  .card-image-wrap img[src=""] ~ .placeholder-icon {
+    display: flex;
+  }
+
+  .card-image-wrap .placeholder-icon {
+    display: none;
+  }
+
+  /* SCRATCH OVERLAY ON IMAGE */
+  .card-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(0,0,0,0.04) 40px,
+      rgba(0,0,0,0.04) 41px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* SUSPECT NUMBER */
+  .suspect-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-family: 'Creepster', cursive;
+    font-size: 1.6rem;
+    color: var(--blood);
+    text-shadow: 1px 1px 4px #000;
+    z-index: 5;
+    line-height: 1;
+  }
+
+  /* CARD BODY */
+  .card-body {
+    padding: 16px 18px 18px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .suspect-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 4px;
+  }
+
+  .suspect-role {
+    font-size: 0.75rem;
+    color: var(--rust);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    margin-bottom: 14px;
+  }
+
+  /* VOTE BAR */
+  .vote-bar-wrap {
+    margin-bottom: 14px;
+  }
+
+  .vote-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.15em;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .vote-bar-label .vote-count {
+    color: var(--highlight);
+    font-weight: 700;
+  }
+
+  .vote-bar-track {
+    height: 4px;
+    background: #222;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vote-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--deep-blood), var(--highlight));
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px var(--blood);
+  }
+
+  /* VOTE BUTTON */
+  .vote-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    color: var(--pale);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vote-btn::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--deep-blood);
+    transition: left 0.3s ease;
+    z-index: 0;
+  }
+
+  .vote-btn:hover::before { left: 0; }
+
+  .vote-btn span { position: relative; z-index: 1; }
+
+  .vote-btn:hover {
+    border-color: var(--blood);
+    color: var(--bone);
+  }
+
+  .vote-btn.active {
+    background: var(--blood);
+    border-color: var(--blood);
+    color: var(--bone);
+  }
+
+  .vote-btn.active::before { display: none; }
+
+  /* RESULTS PANEL */
+  .results-section {
+    background: linear-gradient(180deg, #0a0a0a, #0f0505);
+    border-top: 2px solid var(--blood);
+    padding: 60px 20px;
+    position: relative;
+  }
+
+  .results-section::before {
+    content: '— RESULTADOS FINAIS —';
+    display: block;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.4em;
+    font-size: 0.75rem;
+    color: var(--rust);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+
+  .results-grid {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    background: #111;
+    border: 1px solid #222;
+    transition: border-color 0.3s;
+  }
+
+  .result-row.top-1 { border-color: var(--blood); background: #160505; }
+
+  .result-rank {
+    font-family: 'Creepster', cursive;
+    font-size: 1.1rem;
+    color: #444;
+  }
+
+  .result-row.top-1 .result-rank { color: var(--blood); }
+
+  .result-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pale);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .result-bar-mini {
+    width: 120px;
+    height: 3px;
+    background: #222;
+    position: relative;
+    display: none;
+  }
+
+  @media (min-width: 500px) { .result-bar-mini { display: block; } }
+
+  .result-bar-mini-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--deep-blood), var(--highlight));
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .result-votes {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--highlight);
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* ADMIN PANEL */
+  .admin-section {
+    background: #060606;
+    border-top: 1px solid #1a1a1a;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .admin-toggle {
+    background: transparent;
+    border: 1px solid #333;
+    color: #444;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .admin-toggle:hover { border-color: #555; color: #777; }
+
+  .admin-panel {
+    display: none;
+    margin-top: 24px;
+    background: #0e0e0e;
+    border: 1px solid #2a2a2a;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 24px;
+    text-align: left;
+  }
+
+  .admin-panel.open { display: block; margin-top: 24px; }
+
+  .admin-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 20px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+  }
+
+  .admin-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+  }
+
+  .admin-entry-name { color: var(--pale); letter-spacing: 0.05em; }
+  .admin-entry-votes { color: var(--highlight); font-weight: 700; }
+
+  .admin-total {
+    margin-top: 16px;
+    text-align: right;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    color: var(--rust);
+    letter-spacing: 0.15em;
+  }
+
+  .admin-total span { color: var(--highlight); font-size: 1.2rem; margin-left: 8px; }
+
+  .reset-btn {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid var(--deep-blood);
+    color: var(--rust);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+  }
+
+  .reset-btn:hover { background: var(--deep-blood); color: var(--bone); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: #2a2a2a;
+    text-transform: uppercase;
+    border-top: 1px solid #111;
+  }
+
+  /* DRIPS DECORATIVE */
+  .blood-drips {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 0 20px;
+  }
+
+  .bdrop {
+    width: 2px;
+    height: 0;
+    background: linear-gradient(to bottom, var(--blood) 0%, transparent 100%);
+    border-radius: 0 0 2px 2px;
+    animation: growDrip 2s ease-out forwards;
+  }
+
+  @keyframes growDrip {
+    to { height: 40px; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .suspects-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card-image-wrap { height: 160px; }
+    .suspect-name { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DRIPS TOP -->
+<div class="drip-container" aria-hidden="true">
+  <div class="drip" style="animation-duration:3.1s; animation-delay:0s; height:60px;"></div>
+  <div class="drip" style="animation-duration:4.5s; animation-delay:0.8s; height:80px;"></div>
+  <div class="drip" style="animation-duration:2.8s; animation-delay:1.5s; height:50px;"></div>
+  <div class="drip" style="animation-duration:5.2s; animation-delay:0.3s; height:70px;"></div>
+  <div class="drip" style="animation-duration:3.7s; animation-delay:2s; height:55px;"></div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <h1 class="site-title">CENA OCULTA</h1>
+  <p class="subtitle">Suspense &nbsp;·&nbsp; Terror &nbsp;·&nbsp; Cinema</p>
+  <p class="tagline">Treze suspeitos. Um <span>impostor</span>. Quem você acusa?</p>
+</header>
+
+<div class="warning-banner">
+  ⚠ &nbsp; Conteúdo perturbador — Entre por sua própria conta e risco &nbsp; ⚠
+</div>
+
+<!-- BLOOD DRIPS DECO -->
+<div class="blood-drips" aria-hidden="true">
+  <div class="bdrop" style="animation-delay:0.2s"></div>
+  <div class="bdrop" style="animation-delay:0.6s"></div>
+  <div class="bdrop" style="animation-delay:1.0s"></div>
+  <div class="bdrop" style="animation-delay:0.4s"></div>
+  <div class="bdrop" style="animation-delay:0.9s"></div>
+</div>
+
+<!-- SUSPECTS SECTION -->
+<section class="suspects-section">
+  <h2 class="section-title">— Os Suspeitos —</h2>
+  <p class="section-divider">✦ ✦ ✦</p>
+
+  <div class="total-votes-bar">
+    <span class="label">Total de votos</span>
+    <span class="count" id="total-votes-display">0</span>
+  </div>
+
+  <div class="suspects-grid" id="suspects-grid">
+    <!-- CARDS GERADOS PELO JS -->
+  </div>
+</section>
+
+<!-- RESULTS SECTION -->
+<section class="results-section">
+  <h2 class="section-title">Placar dos Acusados</h2>
+  <div class="results-grid" id="results-grid">
+    <!-- GERADO PELO JS -->
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<div class="admin-section">
+  <button class="admin-toggle" onclick="toggleAdmin()">▸ Painel do Administrador</button>
+  <div class="admin-panel" id="admin-panel">
+    <p class="admin-title">Relatório de Votos — Cena Oculta</p>
+    <div id="admin-list"></div>
+    <div class="admin-total">Total de votos: <span id="admin-total">0</span></div>
+    <button class="reset-btn" onclick="resetVotes()">⚠ Resetar Todos os Votos</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2024 Cena Oculta — Todos os direitos reservados &nbsp;|&nbsp; Projeto de Terror e Suspense
+</footer>
+
+<script>
+// ============================================================
+//  CONFIGURAÇÃO DOS SUSPEITOS
+//  Edite o campo "img" com o caminho da sua imagem.
+//  Exemplo: img: "imagens/suspeito1.jpg"
+//  Deixe img: "" para mostrar o ícone placeholder.
+// ============================================================
+const suspects = [
+  {
+    id: 1,
+    name: "Juliany",          // ← Altere o nome
+    role: "Papel / Personagem",   // ← Altere o papel
+    img: "imagens_cenaoculta/juliany.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 2,
+    name: "Hadassa",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/hadassa.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 3,
+    name: "Agatha",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/agatha.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 4,
+    name: "Giovanna",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/giovanna.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 5,
+    name: "Isabelly",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/isabelly.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 6,
+    name: "Lorena",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/lorena.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 7,
+    name: "Lívia",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/livia.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 8,
+    name: "Luana",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/luana.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 9,
+    name: "Andresson",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/andresson.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 10,
+    name: "Débora",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/debora.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 11,
+    name: "William",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/william.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  },
+  {
+    id: 12,
+    name: "Samuel",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/samuel.png"  
+  },
+  {
+    id: 13,
+    name: "Davi",
+    role: "Papel / Personagem",
+    img: "imagens_cenaoculta/davi.png"                        // ← COLOQUE O CAMINHO DA IMAGEM AQUI
+  }
+];
+
+// ============================================================
+//  LÓGICA DE VOTAÇÃO (localStorage — persiste no navegador)
+// ============================================================
+const STORAGE_KEY = 'cena_oculta_votes';
+const VOTED_KEY   = 'cena_oculta_user_vote';
+
+function loadVotes() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // Init com 0 para cada suspeito
+  const v = {};
+  suspects.forEach(s => v[s.id] = 0);
+  return v;
+}
+
+function saveVotes(votes) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+}
+
+function getUserVote() {
+  return localStorage.getItem(VOTED_KEY) || null;
+}
+
+function setUserVote(id) {
+  localStorage.setItem(VOTED_KEY, String(id));
+}
+
+function clearUserVote() {
+  localStorage.removeItem(VOTED_KEY);
+}
+
+let votes    = loadVotes();
+let userVote = getUserVote();
+
+function totalVotes() {
+  return Object.values(votes).reduce((a, b) => a + b, 0);
+}
+
+function maxVotes() {
+  return Math.max(...Object.values(votes), 1);
+}
+
+// ============================================================
+//  RENDERIZAÇÃO
+// ============================================================
+function renderCards() {
+  const grid = document.getElementById('suspects-grid');
+  grid.innerHTML = '';
+
+  suspects.forEach(s => {
+    const isVoted = String(userVote) === String(s.id);
+    const vCount  = votes[s.id] || 0;
+    const pct     = Math.round((vCount / totalVotes()) * 100) || 0;
+
+    const card = document.createElement('div');
+    card.className = 'suspect-card' + (isVoted ? ' voted' : '');
+    card.innerHTML = `
+      <div class="card-image-wrap">
+        ${s.img
+          ? `<img src="${s.img}" alt="${s.name}" loading="lazy">`
+          : `
+          <div class="placeholder-icon" style="display:flex">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+            <span>Inserir imagem</span>
+          </div>`
+        }
+        <span class="suspect-number">#${String(s.id).padStart(2,'0')}</span>
+      </div>
+      <div class="card-body">
+        <div class="suspect-name">${s.name}</div>
+        <div class="suspect-role">${s.role}</div>
+        <div class="vote-bar-wrap">
+          <div class="vote-bar-label">
+            <span>Votos</span>
+            <span class="vote-count">${vCount}</span>
+          </div>
+          <div class="vote-bar-track">
+            <div class="vote-bar-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+        <button class="vote-btn ${isVoted ? 'active' : ''}" onclick="castVote(${s.id})">
+          <span>${isVoted ? '✓ Acusado' : 'Acusar'}</span>
+        </button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById('total-votes-display').textContent = totalVotes();
+}
+
+function renderResults() {
+  const grid = document.getElementById('results-grid');
+  grid.innerHTML = '';
+
+  const sorted = [...suspects]
+    .map(s => ({ ...s, count: votes[s.id] || 0 }))
+    .sort((a, b) => b.count - a.count);
+
+  const max = Math.max(...sorted.map(s => s.count), 1);
+
+  sorted.forEach((s, i) => {
+    const pct = Math.round((s.count / max) * 100);
+    const row = document.createElement('div');
+    row.className = 'result-row' + (i === 0 && s.count > 0 ? ' top-1' : '');
+    row.innerHTML = `
+      <span class="result-rank">${i + 1}</span>
+      <span class="result-name">${s.name}</span>
+      <div class="result-bar-mini">
+        <div class="result-bar-mini-fill" style="width:${pct}%"></div>
+      </div>
+      <span class="result-votes">${s.count}</span>
+    `;
+    grid.appendChild(row);
+  });
+}
+
+function renderAdmin() {
+  const list = document.getElementById('admin-list');
+  list.innerHTML = '';
+
+  const sorted = [...suspects]
+    .map(s => ({ ...s, count: votes[s.id] || 0 }))
+    .sort((a, b) => b.count - a.count);
+
+  sorted.forEach(s => {
+    const entry = document.createElement('div');
+    entry.className = 'admin-entry';
+    entry.innerHTML = `
+      <span class="admin-entry-name">${s.name}</span>
+      <span class="admin-entry-votes">${s.count} voto${s.count !== 1 ? 's' : ''}</span>
+    `;
+    list.appendChild(entry);
+  });
+
+  document.getElementById('admin-total').textContent = totalVotes();
+}
+
+// ============================================================
+//  AÇÃO DE VOTO
+// ============================================================
+function castVote(id) {
+  const prevVote = getUserVote();
+
+  // Se já votou neste mesmo — cancela (toggle)
+  if (String(prevVote) === String(id)) {
+    votes[id] = Math.max(0, (votes[id] || 0) - 1);
+    clearUserVote();
+    userVote = null;
+  } else {
+    // Remove voto anterior se existia
+    if (prevVote && votes[prevVote] !== undefined) {
+      votes[prevVote] = Math.max(0, votes[prevVote] - 1);
+    }
+    // Adiciona novo voto
+    votes[id] = (votes[id] || 0) + 1;
+    setUserVote(id);
+    userVote = String(id);
+  }
+
+  saveVotes(votes);
+  renderAll();
+}
+
+function renderAll() {
+  renderCards();
+  renderResults();
+  renderAdmin();
+}
+
+// ============================================================
+//  ADMIN PANEL
+// ============================================================
+function toggleAdmin() {
+  const panel = document.getElementById('admin-panel');
+  panel.classList.toggle('open');
+  renderAdmin();
+}
+
+function resetVotes() {
+  if (!confirm('Tem certeza que quer resetar TODOS os votos? Esta ação não pode ser desfeita.')) return;
+  suspects.forEach(s => votes[s.id] = 0);
+  saveVotes(votes);
+  clearUserVote();
+  userVote = null;
+  renderAll();
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+// Garante que todos os suspeitos existam no objeto de votos
+suspects.forEach(s => {
+  if (votes[s.id] === undefined) votes[s.id] = 0;
+});
+
+renderAll();
+</script>
+</body>
+</html>
